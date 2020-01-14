@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>介绍 — Vue.js</title>
+    <meta charset="UTF-8">
+ </head>
+
+ <body>
+ <div id="app">{{message}}
+  <div :id="message"></div>
+  <todo-list >
+    <template v-slot>
+        <todo-item @delete="handleDelete" v-for="item in list" data-test="dd" :title="item.title" v-bind:del="item.del" >
+            <template v-slot:pre-icon="{value}">
+                <span v-if="value<0.5">前置图标1</span>
+                <span v-else >前置图标2</span>
+            </template>
+        </todo-item>
+    </template>
+  </todo-list>
+<!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+<input type="button" v-on:keyup.enter="submit" value="提交" />
+
+ </div>
+
+ <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+ <script>
+ Vue.component('todo-item',{
+     props: {
+         title: String,
+         del: {
+             type: Boolean,
+             default: false
+         },
+         preiconType: String,
+     },
+     //或
+     //props: ['title','del'],
+     template: `
+     <li >
+        <slot name="pre-icon" :num="value"></slot>
+        <span v-if="!del">{{title}}</span><span v-else style="text-decoration: line-through">{{title}}</span>
+        <slot name="suf-icon">😄</solt>
+        <button v-show="!del" @click="handlerClick">删除</button>
+        </button></li>`,
+     data: function() {
+         return {
+             num: Math.random()
+         }
+     },
+     methods: {
+            handlerClick(){
+                console.log('删除')
+                this.$emit('delete',this.title,this.del)
+            }
+     }
+ })
+ 
+ Vue.component('todo-list',{
+     template:`
+      <ul>
+        <slot></slot>
+     </ul>
+     `,
+     data: function(){
+         return {
+             list: [
+                {
+                    title: '课程1',
+                    del: false
+                },
+                {
+                    title: '课程2',
+                    del: true
+                },
+                {
+                    title: '课程2',
+                    del: false
+                },
+                {
+                    title: '课程2',
+                    del: true
+                }
+            ]
+         }
+     },
+     methods: {
+        
+     }
+ })
+
+ var vm = new Vue({
+     el:'#app',
+     data:{
+         message: 'helloworld你好',
+         list:[
+            {
+                title: '课程1',
+                del: false
+            },
+             {
+                title: '课程2',
+                del: true
+            },
+             {
+                title: '课程3',
+                del: true
+            }
+         ],
+         item: {
+             title: '课程1',
+             del: false
+         }
+     },
+     methods: {
+         handleDelete(val,v2){
+            console.log('handleDelete',val,v2)
+        }
+     }
+ })
+ </script>
+ </body>
+ </html>
