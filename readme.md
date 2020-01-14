@@ -151,3 +151,34 @@
     * v-on:click.stop 阻止单击事件继续传播
 
   * 
+
+# 安装
+
+* 全局安装
+
+  ```bash
+  npm install -g @vue/cli
+  # OR
+  yarn global add @vue/cli
+  ```
+
+  创建项目
+
+  ```
+  vue create vue-demo
+  ```
+
+* App.vue
+
+  * data用函数返回return对象而不是直接定义对象，因为App.vue已不是根实例有可能被复用，根实例是main.js中的new Vue()
+
+  * ```
+    data(){//对象return返回
+        return {
+          message: 'hello world',
+        }
+    }
+    ```
+
+  * 
+
