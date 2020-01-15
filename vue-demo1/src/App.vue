@@ -1,20 +1,47 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <input v-model="message" >
+    <input :value="message" @input="handleChange" >
+  {{message}}
+    <todo-list >
+    <template v-slot>
+        <todo-item @delete="handleDelete" v-for="(item, index) in list"  v-bind:key="index" data-test="dd" :title="item.title" v-bind:del="item.del" >
+            <template v-slot:pre-icon="{value}">
+                <span v-if="value<0.5">前置图标1</span>
+                <span v-else >前置图标2</span>
+            </template>
+        </todo-item>
+    </template>
+  </todo-list>
+
+
+    <input type="button" value="change name" @click="handleChangeName" >
+    <button @click="handleInfoChange" >change info</button>
+    <button @click="handleInfoXChange" >change info.x</button>
+    <button @click="handleListChange" >change list</button>
+    <PropsAndData :name="name" :info="info" :list="list" ></PropsAndData>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TodoList from './components/TodoList.vue'
+import TodoItem from './components/TodoItem.vue'
+import PropsAndData from './components/PropsAndData'
 
+let name = "world"
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    TodoList,TodoItem,PropsAndData
   },
-  data(){//对象return返回
+  data(){//方法return返回对象
+    //this.name = name
     return {
+      name : name,
+      //info: {},
+      info: {
+        number: 0
+      },
       message: 'hello world',
       list:[
         {
@@ -30,20 +57,29 @@ export default {
     }
   },
   methods: {
-    handleDelete(){
-
+    handleChange(e){
+      this.message = e.target.value
+    },
+    handleDelete(val){
+      this.$.emit('update:title','测试')
+      console.log('handleDelete',val)
+    },
+    handleChangeName(){
+      this.name = 'vue' + Date.now();
+      console.log('handleChangeName',this.name)
+    },
+    handleInfoChange(){
+      this.info.number++
+      console.log('handleInfoChange',this.info)
+    },
+    handleInfoXChange(){
+      this.$set(this.info, 'x', 'xxx')
+      console.log('handleInfoXChange',this.info)
+    },
+    handleListChange(){
+      this.list.push(1,2)
+      console.log('handleListChange',this.list)
     }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

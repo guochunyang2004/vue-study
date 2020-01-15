@@ -42,7 +42,7 @@
         <span v-if="!del">{{title}}</span><span v-else style="text-decoration: line-through">{{title}}</span>
         <slot name="suf-icon">😄</solt>
         <button v-show="!del" @click="handlerClick">删除</button>
-        </button></li>`,
+        </li>`,
      data: function() {
          return {
              num: Math.random()
