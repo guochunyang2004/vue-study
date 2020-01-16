@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.4.4",
+    "moment": "^2.24.0",
     "vue": "^2.6.10"
   },
   "devDependencies": {
@@ -30,7 +31,7 @@
       "eslint:recommended"
     ],
     "rules": {
-      "no-console":"off"
+      "no-console": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

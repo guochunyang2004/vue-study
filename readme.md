@@ -309,3 +309,180 @@
   * Watcher：保存视图中使用的data变量，当变量变化时Watcher监视变化后通知视图
 
   * 详细参考：https://cn.vuejs.org/v2/guide/list.html#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9
+
+# 计算属性
+
+* 计算属性 computed
+
+  * 减少模板中计算逻辑
+  * 数据缓存
+  * 依赖固定的数据类型（响应式数据）
+
+* 强制刷新模版 $forceUpdate()
+
+  * ```
+    <button @click="()=>$forceUpdate()">forceUpdate</button>
+    ```
+
+  * 调用计算方法
+
+    * ```
+      //只更新有变化的数据到视图
+      computed: {
+              reversedMessage1() {}
+      },
+      methods: {
+              reversedMessage2(){}
+      }
+      ```
+
+    * ```
+      //computed 引用方法名
+      <p>Reversed message1: {{reversedMessage1}}</p>
+      //methods 引用 方法名+括号
+      <p>Reversed message2: {{reversedMessage2()}}</p>
+      ```
+
+# 侦听器 watch
+
+* 特点
+
+  * 更加灵活、通用
+  * watch 中可以执行任何逻辑，如函数节流，Ajax 异步获取数据，甚至操作 DOM
+
+* vue中监听数组底层
+
+  * https://github.com/vuejs/vue/blob/dev/src/core/observer/array.js#L27
+    通过Object.defineProperty改写了原方法，27行original是改写前记录的数组原方法，然后额外添加了Vue自己的逻辑
+
+* 代码示例
+
+  ```
+  export default {
+      data(){
+          return {
+              a: 1,
+              b: { c: 2, d: 3 },
+              e: {
+                  f: {
+                      g: 4
+                  }
+              },
+              h: []
+          }
+      },
+      watch:{
+          a: function(val, oldVal) {
+              this.b.c += 1;
+              console.log("new: %s, old: %s",val, oldVal)
+          },
+          "b.c": function(val,oldVal) {
+              this.b.d += 1
+              console.log("new: %s, old: %s",val,oldVal)
+          },
+          "b.d": function(val, oldVal) {
+              this.e.f.g += 1;
+              console.log("new: %s, old: %s",val, oldVal)
+          },
+          e: {//深度监听e下的所有属性
+              handler: function(val, oldVal) {
+                  this.h.push("😄")
+                  console.log("new: %s, old: %s",val, oldVal)
+              },
+              deep: true //启用深度监听
+          },
+          h(val, oldVal) {
+              console.log("new: %s, old: %s",val, oldVal)
+          },
+  
+      }
+  }
+  ```
+
+  
+
+# 计算属性 computed vs 侦听器 watch
+
+	* computed 能做的，watch 都能做，反之则不行
+	* 能用 computed 的尽量用 computed
+
+# VUE 生命周期
+
+* 创建阶段（执行一次）
+  * beforeCreate
+    * 之前：初始化事件和生命周期
+    * 之后：数据观测、属性、侦听器配置等
+  * created
+    * 之后：模板编译到 render
+  * beforeMount
+  * render（如果写render函数这个阶段跳过）
+    * 生成虚拟DOM
+    * 挂载真实DOM
+  * mounted
+    * 异步请求、操作 DOM、定时器等
+* 更新阶段（执行多次）
+  * befoureUpdate
+    * 依赖数据改变或$forceUpdate 强制刷新
+    * 移除已经添加的事件监听器等
+      * 万万不可更改依赖数据
+  * render
+  * updated
+    * 操作 DOM 添加事件监听器等
+      * 万万不可以更改依赖数据
+* 销毁阶段（执行一次）
+  * beforeDestory
+    * 移除已经添加的事件监听器、计时器等
+  * destroyed
+
+# VUE 常用指令
+
+* v-bind:key 简写 :key
+* v-on:click 简写 @click
+* v-model 双向语法糖
+* v-show 是否显示，display:none;
+* v-text 代替 innerText
+* v-pre 直接显示Dom内部字符串，如{{}}
+* v-once 变量只解析一次，后续不渲染
+* v-cloak 几乎无用，简单项目中，使用 v-cloak 指令是解决屏幕闪动的好方法
+
+# 自定义指令
+
+* 生命周期钩子
+  * bind、inserted、update、componentUpdated、unbind
+
+# VUE函数式组件?
+
+* functional:true
+
+* 无状态、无实例、没有 this 上下文、无生命周期
+
+* 无状态 **==** 无响应式数据
+
+* 无实例 **==** 无this上下文
+
+* 渲染开销低，因为函数式组件只是函数
+
+  ```js
+  //新建js文件内容
+  export default {
+      functional: true,
+      // Props 是可选的
+      props: {
+        // ...
+      },
+      // 为了弥补缺少的实例
+      // 提供第二个参数作为上下文
+      render: (createElement, context) => {
+          return context.scopedSlots.default && context.scopedSlots.default(context.props || {})
+      }
+  }
+  ```
+
+  
+
+# VUE 常用类库
+
+* moment 时间格式化
+  * npm install moment --save
+  * import moment from 'moment'
+
