@@ -14,7 +14,10 @@
         <span v-bind:class="{current: num==4}" v-on:click="change(4)">provide</span>
       </li>
       <li>
-        <span v-bind:class="{current: num==5}" v-on:click="change(5)">provide</span>
+        <span v-bind:class="{current: num==5}" v-on:click="change(5)">跨层级组件实例</span>
+      </li>
+      <li>
+        <span v-bind:class="{current: num==6}" v-on:click="change(6)">jsx</span>
       </li>
     </ul>
     <div class="content">
@@ -79,6 +82,11 @@
       <div  v-show="num == 5">
         <ChildrenA />
       </div>
+      <div  v-show="num == 6">
+        <AnchoredHeading3 :level="1">Hello world!</AnchoredHeading3>
+        <AnchoredHeading3 :level="2">Hello world!</AnchoredHeading3>
+        <AnchoredHeading3 :level="3">Hello world!</AnchoredHeading3>
+      </div>
     </div>
   </div>
 </template>
@@ -95,6 +103,7 @@ import Clock from "./components/1.6/Clock"
 import TempVar from "./components/1.6/TempVar"
 //import ChildrenA from "./views/1.8/ChildrenA"
 import ChildrenA from "./views/1.9/ChildrenA";
+import AnchoredHeading3 from "./views/1.10/AnchoredHeading.jsx";
 let name = "world";
 export default {
   name: "app",
@@ -109,7 +118,8 @@ export default {
     Clock,
     TempVar,
     //ChildrenA,
-    ChildrenA
+    ChildrenA,
+    AnchoredHeading3,
   },
   data() {
     //方法return返回对象

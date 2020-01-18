@@ -526,6 +526,8 @@
     }
   ```
 
+* 源代码：https://github.com/guochunyang2004/vue-study/tree/master/vue-demo1/src/views/1.8
+
 * 优雅的获取跨层级组件实例
 
   * 定义 provide 哈希缓存方法
@@ -568,11 +570,101 @@
     <ChildrenH v-ant-ref="c => setChildrenRef('childrenH', c)" />
     ```
 
-    
+  * 源代码：https://github.com/guochunyang2004/vue-study/tree/master/vue-demo1/src/views/1.9
 
-    
+# template 和 JSX 
 
-# 常用工具：ESLint、Prettier、vue-devtools
+* template
+
+  * 模板语法（HTML 的扩展）
+
+  * 数据绑定使用 Mustache 语法（双大括号）
+
+    ```
+    <span>Message:{{ msg }}</span>
+    ```
+
+* JSX
+
+  * JavaScript 的语法扩展
+
+  * 数据绑定使用单引号
+
+    ```
+    <span>Message:{this.msg}</span>
+    ```
+
+  * JSX定义方法
+
+    ```
+    //AnchoredHeading.jsx
+    export default {
+      props: {
+        level: {
+          type: Number,
+          default: 1
+        }
+      },
+      render: function(h) {
+        const Tag = `h${this.level}`;
+        return <Tag>{this.$slots.default}</Tag>;
+      }
+    };
+    
+    ```
+
+    以上代码最终编译为js文件：
+
+    ```
+    //AnchoredHeading.js
+    export default {
+      props: {
+        level: {
+          type: Number,
+          default: 1
+        }
+      },
+      //jsx 最终编译样式
+      render: function(createElement) {
+        return createElement(
+          "h" + this.level, // 标签名称
+          this.$slots.default // 子元素数组
+        );
+      }
+    };
+    
+    ```
+
+* template 和 JSX 是语法糖 
+
+  ```
+  <span>Message:{{ msg }}</span>
+  和
+  <span>Message:{this.msg}</span>
+  ```
+
+  
+
+  最终编译为：
+
+  ```
+  createElement("span", `Message: ${this.msg}`)
+  ```
+
+* template vs JSX
+
+  * template
+
+    * 学习成本低、大量内置指令简化开发、组件作用域 CSS
+    * But 灵活性低
+
+  * JSX：灵活、灵活、灵活
+
+  * VUE 官方文档：
+
+    “更抽象一点来看，我们可以把组件区分为两类：一类是偏视图表现的（presentational），一类则是偏逻辑的（logical），我们推荐在前者中使用模板，在后者中使用 JSX 或渲染函数。这两类组件的比例会根据应用类型的不同有所变化，但整体来说我们发现表现类的组件远远多于逻辑类组件。”
+
+# VUE常用工具
 
 * ESLint 配置
 
@@ -596,3 +688,4 @@
   * npm install moment --save
   * import moment from 'moment'
 
+* 待更新……
