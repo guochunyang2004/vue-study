@@ -83,9 +83,11 @@
         <ChildrenA />
       </div>
       <div  v-show="num == 6">
+        <VNodes :vnodes="getJSXSpan()" />
         <AnchoredHeading3 :level="1">Hello world!</AnchoredHeading3>
         <AnchoredHeading3 :level="2">Hello world!</AnchoredHeading3>
         <AnchoredHeading3 :level="3">Hello world!</AnchoredHeading3>
+        <VNodes :vnodes="getAnchoredHeading(4)" />
       </div>
     </div>
   </div>
@@ -120,6 +122,10 @@ export default {
     //ChildrenA,
     ChildrenA,
     AnchoredHeading3,
+    VNodes: {
+      functional: true,
+      render: (h, ctx) => ctx.props.vnodes
+    }
   },
   data() {
     //方法return返回对象
@@ -185,7 +191,15 @@ export default {
     handleListChange() {
       this.list.push(1, 2);
       console.log("handleListChange", this.list);
-    }
+    },
+    //-----
+    getJSXSpan() {
+      return <span>Message: {this.message}</span>;
+    },
+    getAnchoredHeading(level) {
+      const Tag = `h${level}`;
+      return <Tag>Hello world!</Tag>;
+    },
   }
 };
 </script>

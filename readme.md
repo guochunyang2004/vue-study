@@ -666,11 +666,30 @@
 
 # VUE常用工具
 
-* ESLint 配置
+* ESLint 配置 （eslintConfig）
 
   * "plugin:vue/essential",
 
      "eslint:recommended"
+
+    ```
+    "extends": [
+          "plugin:vue/essential",
+          "eslint:recommended"
+    ],
+    ```
+
+  *  "no-unused-vars": "off"
+
+    eslintConfig>rules>：
+
+    ```
+    "rules": {
+        "no-unused-vars": "off"
+     },
+    ```
+
+    
 
 * Prettier
 
