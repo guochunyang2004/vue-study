@@ -12,6 +12,20 @@
   * v-show：是否显示，隐藏时候元素已挂载dom，样式为display: none;
   * v-for：循环
 
+* VUE 常用指令
+  * v-bind:key 简写 :key
+  * v-on:click 简写 @click
+  * v-model 双向语法糖
+  * v-show 是否显示，display:none;
+  * v-text 代替 innerText
+  * v-pre 直接显示Dom内部字符串，如{{}}
+  * v-once 变量只解析一次，后续不渲染
+  * v-cloak 几乎无用，简单项目中，使用 v-cloak 指令是解决屏幕闪动的好方法
+
+* 自定义指令
+  * 生命周期钩子
+    * bind、inserted、update、componentUpdated、unbind
+
 # 组件
 
 * 组件作用：复用
@@ -434,21 +448,7 @@
     * 移除已经添加的事件监听器、计时器等
   * destroyed
 
-# VUE 常用指令
-
-* v-bind:key 简写 :key
-* v-on:click 简写 @click
-* v-model 双向语法糖
-* v-show 是否显示，display:none;
-* v-text 代替 innerText
-* v-pre 直接显示Dom内部字符串，如{{}}
-* v-once 变量只解析一次，后续不渲染
-* v-cloak 几乎无用，简单项目中，使用 v-cloak 指令是解决屏幕闪动的好方法
-
-# 自定义指令
-
-* 生命周期钩子
-  * bind、inserted、update、componentUpdated、unbind
+* * 
 
 # VUE函数式组件?
 
@@ -478,7 +478,117 @@
   }
   ```
 
+# 高级特性 provide 和 inject
+
+* provide 提供者
+
+  ```
+  provide() {
+      return {
+        theme: this
+      };
+    },
+    data() {
+      return {
+        color: "blue"
+      };
+    },
+    methods: {
+      changeColor(color) {
+        if (color) {
+          this.color = color;
+        } else {
+          this.color = this.color === "blue" ? "red" : "blue";
+        }
+      }
+    }
+  ```
+
+* inject 调用
+
+  ```
+  //使用
+  <h3 :style="{ color: theme.color }">E 结点</h3>
+  <button @click="handleClick">改变color为green</button>
   
+  //注入
+  inject: {
+      theme: {
+        default: () => ({})
+      }
+    },
+    methods: {
+      handleClick() {
+        if (this.theme.changeColor) {
+          this.theme.changeColor("green");
+        }
+      }
+    }
+  ```
+
+* 优雅的获取跨层级组件实例
+
+  * 定义 provide 哈希缓存方法
+
+    ```
+    provide() {
+        return {
+          setChildrenRef: (name, ref) => {
+            this[name] = ref;
+          },
+          getChildrenRef: name => {
+            return this[name];
+          },
+          getRef: () => {
+            return this;
+          }
+        };
+      },
+    ```
+
+  * 其它层注入 inject 
+
+    ```
+    inject: {
+        setChildrenRef: {
+          default: () => {}
+        }
+    },
+    methods: {
+    	//跨层获取父组件
+        getARef() {
+          console.log(this.getParentRef());
+        },
+        //跨层获取子组件
+        getHRef() {
+          console.log(this.getParentChildrenRef("childrenH"));
+        }
+      }
+    //设置组件哈希缓存  
+    <ChildrenH v-ant-ref="c => setChildrenRef('childrenH', c)" />
+    ```
+
+    
+
+    
+
+# 常用工具：ESLint、Prettier、vue-devtools
+
+* ESLint 配置
+
+  * "plugin:vue/essential",
+
+     "eslint:recommended"
+
+* Prettier
+
+* vue-devtools
+
+  * 集成 Vuex
+  * 可远程调试
+  * 性能分析
+
+  ​	
 
 # VUE 常用类库
 

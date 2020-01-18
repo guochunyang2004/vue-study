@@ -10,6 +10,12 @@
       <li>
         <span v-bind:class="{current: num==3}" v-on:click="change(3)">函数式组件</span>
       </li>
+      <li>
+        <span v-bind:class="{current: num==4}" v-on:click="change(4)">provide</span>
+      </li>
+      <li>
+        <span v-bind:class="{current: num==5}" v-on:click="change(5)">provide</span>
+      </li>
     </ul>
     <div class="content">
       <transition name="fade">
@@ -67,6 +73,12 @@
           </TempVar>
         </div>
       </transition>
+      <div v-show="num == 4">
+          <!-- <ChildrenA /> -->
+      </div>
+      <div  v-show="num == 5">
+        <ChildrenA />
+      </div>
     </div>
   </div>
 </template>
@@ -81,7 +93,8 @@ import Watch from "./components/1.5/Watch";
 import Watch1 from "./components/1.5/Watch1";
 import Clock from "./components/1.6/Clock"
 import TempVar from "./components/1.6/TempVar"
-
+//import ChildrenA from "./views/1.8/ChildrenA"
+import ChildrenA from "./views/1.9/ChildrenA";
 let name = "world";
 export default {
   name: "app",
@@ -94,7 +107,9 @@ export default {
     Watch,
     Watch1,
     Clock,
-    TempVar
+    TempVar,
+    //ChildrenA,
+    ChildrenA
   },
   data() {
     //方法return返回对象
