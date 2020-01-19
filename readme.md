@@ -706,5 +706,179 @@
 * moment 时间格式化
   * npm install moment --save
   * import moment from 'moment'
-
 * 待更新……
+
+# Vuex
+
+* 状态管理模式
+
+  * **state**，驱动应用的数据源；
+  * **view**，以声明方式将 **state** 映射到视图；
+  * **actions**，响应在 **view** 上的用户输入导致的状态变化。
+
+* 安装vuex：npm i vuex
+
+* 使用 vuex，
+
+  * 在main.js
+
+    ```
+    import Vuex from 'vuex'
+    Vue.use(Vuex) //让Vuex可以访问到Vue
+    new Vue({
+      store,
+      render: h => h(App),
+    }).$mount('#app')
+    ```
+
+  * vuex 核心概念：state、mutations、actions、getters
+
+    * State ：this.$store.state.xxx 取值
+    * Getter：this.$store.getters.xxx 取值
+    * Mutation：this.$store.commit("xxx") 赋值
+    * Action：this.$store.dispatch("xxx") 赋值
+    * Module
+
+  * vuex 底层原理
+
+    * State ：提供一个响应式数据
+    * Getter：借助 Vue 的计算属性 computed 来实现缓存
+    * Mutation：更改 state 方法
+    * Action：触发 mutation 方法
+    * Module：Vue.set 动态添加 state 到响应式数据中
+
+    ```
+    const store =new Vuex.Store({
+      state: {
+        count: 0,
+      },
+      mutations: {
+        increment(state,n) {
+          //this.state.count++ 或
+          state.count += n
+        }
+      }//异步请求
+      actions: {
+        increment({state}) {//参数是state，但只是包含state的数据
+          setTimeout(()=>{
+            state.count++
+          },3000)
+        }
+      },
+      //缓存作用
+      getters: {
+        doubleCount(state) {
+          return state.count + 2
+        }
+      }
+    })
+    ```
+
+  * ## min-vuex.js
+
+    ```
+    import Vue from 'vue'
+    const Store = function Store(options = {}) {
+        const {state = {}, matations={}} = options
+        this._vm = new Vue({
+            data: {
+                $$state: state
+            }
+        })
+        this._mutations = mutations
+    }
+    Store.prototype.commit = function(type, payload){
+        if (this._mutations[type]){
+            this._mutations[type](this.state,payload)
+        }
+    }
+    Object.defineProperties(Store.prototype,{
+        state: {
+            get: function(){
+                return this._vm._data.$$state
+            }
+        }
+    })
+    export default {Store}
+    ```
+
+    需设置：Vue.prototype.$store = store
+
+  * 同步调用：$store.commit
+
+    ```
+    <button @click="$store.commit('increment',2)">count++</button>
+    ```
+
+  * 异步调用：$store.dispatch
+
+    ```
+    <button @click="$store.dispatch('increment')">count++</button>
+    ```
+
+  * getter
+
+    ```
+     {{$store.getters.doubleCount}}
+    ```
+
+  * vuex 最佳实践
+
+    * Module
+
+      * 开启命名空间 namespaced:true
+      * 嵌套模块不要过深，尽量扁平化
+      * 灵活应用 createNamespacedHelpers
+
+    * map：mapState、mapActions、、
+
+      ```
+      import { mapState, mapActions } from 'vuex'
+      
+      export default {
+        computed: mapState({
+          products: state => state.products.all,
+        }),
+        // computed: {
+        //   products(){
+        //     return this.$store.state.products.all
+        //   }
+        // },
+        methods: mapActions('cart', [
+          'addProductToCart',this.inputAmunt
+        ]),
+        // methods: {
+        //   addProductToCart(product){
+        //     this.$store.dispatch('cart/addProductToCart', product)
+        //   }
+        // },
+        created () {
+          this.$store.dispatch('products/getAllProducts')
+        },
+        //
+        data(){
+          return {
+            inputAmunt:0
+          }
+        }
+      }
+      ```
+
+
+# Vue Router
+
+* 解决的问题
+  * 监听 URL 的变化，并在变化前后执行相应的逻辑
+  * 不同的 URL 对应不同的组件
+  * 提供多种方式改变 URL的API（URL 的改变不能导致浏览器刷新）
+* 使用方式
+  * 提供一个路由配置表，不同 URL 对应不同组件的配置
+  * 初始化路由实例 new VueRouter()
+  * 挂载到 Vue 实例上
+  * 提供一个路由占位，用来挂载 URL 匹配到的组件
+* 路由类型
+  * Hash 模式：丑，无法使用锚点定位
+  * History 模式：需要后端配合，IE9 不兼容（可使用强制刷新处理）
+* 底层原理
+  * 
+
