@@ -882,3 +882,52 @@
 * 底层原理
   * 
 
+# 常用图标使用
+
+* 雪碧图：
+  * 把一个个小的图片合并成大的图片，通过css设置大小和位置展示具体的图标
+  * 特点：1.拼接图片、2.不同颜色的图标需要拼接，图片调整大小也不方便，图片放大后会模糊；
+* 字体：
+  * 成熟方案，i-vue和element-vue都在使用，antd之前的方案
+  * 不能支持多色图标，相当于输出的汉子和英文字母
+* SVG：
+  * 通过组件的封装，不仅可以和字体一样方便，而且可以使用多色图标
+  * antd的几个版本的图标已切换为svg图标
+  * 推荐阿里图标管理平台：https://www.iconfont.cn/
+
+# Nodejs
+
+* cli配置导出命名
+
+  vue inspect > output.js
+
+# 打包优化
+
+* 优化方法：
+
+  * 组件按需加载：babel中组件库按需加载；
+  * 图标按需加载
+  * 路由懒加载和拆包：路由中使用webpackChunkName
+  * lodash引用具体方法，打包会小
+
+  ``` 
+  import debounce from "lodash/debounce"
+  ```
+
+  ​	而不是把lodash全部引入使用，会把库全部打包
+
+  ```
+  import { debounce } from "lodash"
+  ```
+
+* npm 命令
+
+  生成打包报告(优化打包)
+
+  ```
+  npm run build -- --report
+  #结果：/dist/report.html
+  ```
+
+  
+
