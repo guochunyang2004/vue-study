@@ -929,5 +929,20 @@
   #结果：/dist/report.html
   ```
 
-  
+## GitHub相关生态应用
+
+* CI 持续集成
+  * https://travis-ci.org/
+  * https://circleci.com
+* 单测覆盖率
+  * https://codecov.io/
+  * https://coveralls.io/
+* 文档管理
+  * github.io
+  * gitee.io
+  * https://www.netlify.com/
+* issue 管理
+  * https://github.com/apps/close-issue-app
+  * issue-helper(https://vuecomponent.github.io/issue-helper/)
+  * https://github.com/dessant/lock-threads
 
